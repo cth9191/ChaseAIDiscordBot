@@ -21,7 +21,7 @@ A Discord bot that processes @mentions and sends them to an n8n workflow for adv
 
 1. Clone this repository:
 ```
-git clone https://github.com/yourusername/chase-ai-bot.git
+git clone https://github.com/cth9191/chase-ai-bot.git
 cd chase-ai-bot
 ```
 
