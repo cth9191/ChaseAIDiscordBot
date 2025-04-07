@@ -1,0 +1,14 @@
+services:
+  - type: worker
+    name: chase-ai-discord-bot
+    env: node
+    plan: starter # This is a paid plan, required for Background Workers
+    buildCommand: npm install
+    startCommand: node bot.js
+    envVars:
+      - key: NODE_VERSION
+        value: 18.20.8
+      - key: DISCORD_TOKEN
+        sync: false
+      - key: N8N_WEBHOOK_URL
+        sync: false 
