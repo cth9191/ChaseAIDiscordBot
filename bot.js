@@ -123,12 +123,28 @@ client.on(Events.MessageCreate, async message => {
             console.log(`${logTimestamp}   n8n Response Data: ${JSON.stringify(n8nResponse.data)}`);
 
             // --- Process n8n Response ---
-            // IMPORTANT: This assumes your n8n workflow sends back JSON like: { "reply": "This is the answer" }
+            // Handle multiple response formats:
+            // 1. { "reply": "This is the answer" }
+            // 2. [{ "output": "This is the answer" }]
+            let responseText = '';
+            
             if (n8nResponse.data && typeof n8nResponse.data.reply === 'string' && n8nResponse.data.reply.trim() !== '') {
+                // Format 1: { "reply": "answer" }
+                responseText = n8nResponse.data.reply;
+            } else if (Array.isArray(n8nResponse.data) && n8nResponse.data[0] && typeof n8nResponse.data[0].output === 'string') {
+                // Format 2: [{ "output": "answer" }]
+                responseText = n8nResponse.data[0].output;
+            } else if (n8nResponse.data && typeof n8nResponse.data.output === 'string') {
+                // Format 3: { "output": "answer" }
+                responseText = n8nResponse.data.output;
+            }
+            
+            if (responseText && responseText.trim() !== '') {
                 // Send the reply from n8n back to Discord
-                await message.reply(n8nResponse.data.reply);
+                await message.reply(responseText);
             } else {
-                console.warn(`${logTimestamp}   n8n response received, but it didn't contain a valid 'reply' field.`);
+                console.warn(`${logTimestamp}   n8n response received, but couldn't extract a valid response text.`);
+                console.warn(`${logTimestamp}   Response format: ${JSON.stringify(n8nResponse.data)}`);
                 await message.reply("I got a response from the AI, but couldn't format it properly. Maybe try again?");
             }
 
