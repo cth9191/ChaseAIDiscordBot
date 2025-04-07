@@ -6,6 +6,21 @@ const { Client, GatewayIntentBits, Partials, Events } = require('discord.js');
 // Import axios for making HTTP requests (to n8n)
 const axios = require('axios');
 
+// === Keep-Alive Server for Replit ===
+// This simple web server keeps the bot from going to sleep on Replit
+const express = require('express');
+const app = express();
+const port = process.env.PORT || 3000;
+
+app.get('/', (req, res) => {
+  res.send('Bot is online! 🤖');
+});
+
+app.listen(port, () => {
+  console.log(`Keep-alive server listening on port ${port}`);
+});
+// === End Keep-Alive Server ===
+
 // === Configuration ===
 // Get the values from the .env file
 const token = process.env.DISCORD_TOKEN;

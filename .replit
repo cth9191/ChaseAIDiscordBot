@@ -1,0 +1,25 @@
+run = "npm start"
+hidden = [".config", "package-lock.json"]
+language = "nodejs"
+
+[nix]
+channel = "stable-22_11"
+
+[env]
+PATH = "/home/runner/$REPL_SLUG/.config/npm/node_global/bin:/home/runner/$REPL_SLUG/node_modules/.bin"
+npm_config_prefix = "/home/runner/$REPL_SLUG/.config/npm/node_global"
+
+[packager]
+language = "nodejs"
+
+[packager.features]
+packageSearch = true
+guessImports = true
+
+[unitTest]
+language = "nodejs"
+
+[deployment]
+build = ["npm", "install"]
+run = ["npm", "start"]
+deploymentTarget = "cloudrun" 
